@@ -1,5 +1,5 @@
 name: astrbot_plugin_baoguwenfilter
-display_name: 八股文求死啊
+display_name: 八股文去死啊
 desc: 对 LLM 返回的文字内容进行正则过滤/替换，消除常见"八股文"套话，并同步清理对话历史，防止 LLM 重复学习这些内容。
 version: 1.0.0
 author: nikonotnicotine

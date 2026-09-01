@@ -57,7 +57,7 @@ class BaoguwenFilterPlugin(Star):
         # 5. 一种近乎、带着一种
         add_delete("filter_jinhuzhe", r"一种近乎|带着一种")
         # 6. 微不可察、不易察觉
-        add_delete("filter_weibukeча", r"微不可察|不易察觉")
+        add_delete("filter_weibukeча2", r"微不可察|不易察觉")
         # 7. 破折号 → 逗号
         add_replace("replace_dash", r"——", "，")
         # 8. 低吼、幼兽、凶残的、肉刃、四肢百骸
@@ -133,6 +133,32 @@ class BaoguwenFilterPlugin(Star):
         await self._clean_db_history(event, rules)
         self._clean_req_memory(req, rules)
 
+    def _filter_content_field(
+        self,
+        content,
+        rules: list[tuple[re.Pattern, str]],
+    ) -> tuple[any, bool]:
+        """对 content 字段（字符串或 content-block 数组）执行过滤。
+        返回 (new_content, changed)。"""
+        if isinstance(content, str):
+            new = self._apply_rules(content, rules)
+            return new, new != content
+
+        if isinstance(content, list):
+            changed = False
+            new_blocks = []
+            for block in content:
+                if isinstance(block, dict) and block.get("type") == "text":
+                    orig = block.get("text", "")
+                    filtered = self._apply_rules(orig, rules)
+                    if filtered != orig:
+                        block = {**block, "text": filtered}
+                        changed = True
+                new_blocks.append(block)
+            return new_blocks, changed
+
+        return content, False
+
     async def _clean_db_history(
         self,
         event: AstrMessageEvent,
@@ -158,10 +184,8 @@ class BaoguwenFilterPlugin(Star):
                 if msg.get("role") != "assistant":
                     continue
                 content = msg.get("content")
-                if not isinstance(content, str):
-                    continue
-                new_content = self._apply_rules(content, rules)
-                if new_content != content:
+                new_content, was_changed = self._filter_content_field(content, rules)
+                if was_changed:
                     msg["content"] = new_content
                     changed = True
 
@@ -195,18 +219,17 @@ class BaoguwenFilterPlugin(Star):
                 for item in attr_val:
                     if isinstance(item, dict) and item.get("role") == "assistant":
                         content = item.get("content")
-                        if isinstance(content, str):
-                            new_content = self._apply_rules(content, rules)
-                            if new_content != content:
-                                item = {**item, "content": new_content}
-                                changed = True
+                        new_content, was_changed = self._filter_content_field(content, rules)
+                        if was_changed:
+                            item = {**item, "content": new_content}
+                            changed = True
                     else:
                         # 对象类型（非 dict）
-                        content = getattr(item, "content", None)
                         role = getattr(item, "role", None)
-                        if role == "assistant" and isinstance(content, str):
-                            new_content = self._apply_rules(content, rules)
-                            if new_content != content:
+                        if role == "assistant":
+                            content = getattr(item, "content", None)
+                            new_content, was_changed = self._filter_content_field(content, rules)
+                            if was_changed:
                                 try:
                                     item.content = new_content
                                 except AttributeError:

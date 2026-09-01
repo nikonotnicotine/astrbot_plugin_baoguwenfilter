@@ -10,6 +10,7 @@ import re
 from astrbot.api.event import filter, AstrMessageEvent
 from astrbot.api.provider import LLMResponse
 from astrbot.api.star import Context, Star, register
+from astrbot.core.config import AstrBotConfig
 from astrbot.api import logger
 
 
@@ -20,9 +21,10 @@ from astrbot.api import logger
     "1.0.0",
 )
 class BaoguwenFilterPlugin(Star):
-    def __init__(self, context: Context) -> None:
+    def __init__(self, context: Context, config: AstrBotConfig) -> None:
         super().__init__(context)
         self.context = context
+        self.config = config
         logger.info("📝 八股文过滤器已加载。")
 
     # ------------------------------------------------------------------

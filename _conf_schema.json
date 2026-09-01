@@ -1,0 +1,80 @@
+{
+  "filter_jiqi_yisi": {
+    "type": "bool",
+    "description": "过滤"极其"和"一丝"",
+    "default": false,
+    "hint": "删除 LLM 输出中出现的"极其"和"一丝"。"
+  },
+  "replace_laozi": {
+    "type": "bool",
+    "description": "把"老子"替换成"我"",
+    "default": false,
+    "hint": "将 LLM 输出中的"老子"替换为"我"。"
+  },
+  "replace_jidu": {
+    "type": "bool",
+    "description": "把"嫉妒"替换成"忮忌"",
+    "default": false,
+    "hint": "将 LLM 输出中的"嫉妒"替换为"忮忌"。"
+  },
+  "replace_tama": {
+    "type": "bool",
+    "description": "把"他妈"替换成"他爹"",
+    "default": false,
+    "hint": "将 LLM 输出中的"他妈"替换为"他爹"。"
+  },
+  "filter_jinhuzhe": {
+    "type": "bool",
+    "description": "过滤"一种近乎"和"带着一种"",
+    "default": false,
+    "hint": "删除 LLM 输出中出现的"一种近乎"和"带着一种"。"
+  },
+  "filter_weibukeча": {
+    "type": "bool",
+    "description": "过滤"微不可察"和"不易察觉"",
+    "default": false,
+    "hint": "删除 LLM 输出中出现的"微不可察"和"不易察觉"。"
+  },
+  "replace_dash": {
+    "type": "bool",
+    "description": "把破折号"——"替换成逗号"，"",
+    "default": false,
+    "hint": "将 LLM 输出中的破折号"——"替换为中文逗号"，"。"
+  },
+  "filter_violent": {
+    "type": "bool",
+    "description": "过滤"低吼/幼兽/凶残的/肉刃/四肢百骸"",
+    "default": false,
+    "hint": "删除 LLM 输出中出现的"低吼"、"幼兽"、"凶残的"、"肉刃"、"四肢百骸"。"
+  },
+  "filter_burongzhiyi": {
+    "type": "bool",
+    "description": "过滤"不容置疑的"和"不容置喙的"",
+    "default": false,
+    "hint": "删除 LLM 输出中出现的"不容置疑的"和"不容置喙的"。"
+  },
+  "filter_wodexiao": {
+    "type": "bool",
+    "description": "过滤"我的小"",
+    "default": false,
+    "hint": "删除 LLM 输出中出现的"我的小"。"
+  },
+  "filter_xiongqiang": {
+    "type": "bool",
+    "description": "过滤"胸腔震动"和"胸腔振动"",
+    "default": false,
+    "hint": "删除 LLM 输出中出现的"胸腔震动"和"胸腔振动"。"
+  },
+  "custom_filters": {
+    "type": "list",
+    "description": "自定义过滤词（纯文本，每条一个）",
+    "default": [],
+    "hint": "每行填一个要删除的词或短语，纯文本匹配，不需要写正则。例如：简直"
+  },
+  "custom_replacements": {
+    "type": "list",
+    "description": "自定义替换规则（格式：原文||替换文）",
+    "default": [],
+    "hint": "每行一条，格式为"原文||替换文"，以双竖线分隔。例如：简直||真的。若替换文为空则等同于删除，例如：简直||"
+  }
+}
